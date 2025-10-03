@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../nirikshak.dart';
 
@@ -40,6 +41,25 @@ class _NirikshakCallDetailsScreenState
       length: 4,
       child: Scaffold(
         appBar: AppBar(
+          actions: [
+            IconButton(
+              tooltip: 'Copy as cURL',
+              icon: const Icon(Icons.copy),
+              onPressed: () {
+                final curl = widget.call.getCurlCommand();
+                if (curl.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('No request to copy')),
+                  );
+                  return;
+                }
+                Clipboard.setData(ClipboardData(text: curl));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('cURL copied to clipboard')),
+                );
+              },
+            ),
+          ],
           bottom: TabBar(
             tabs: _getTabBars(),
           ),
